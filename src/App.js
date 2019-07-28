@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import './App.css';
+import uniqid from 'uniqid';
 
-function Todo({ todo, index, completeTodo, removeTodo }) {
+function Todo({ todo, onComplete, onRemove }) {
   return (
     <div
       className="todo"
-      style={{ textDecoration: todo.isCompleted ? 'line-through' : '' }}
+      style={{ textDecoration: todo.isComplete ? 'line-through' : '' }}
     >
       {todo.text}
-      <button onClick={() => completeTodo(index)}>Complete</button>
-      <button onClick={() => removeTodo(index)}>X</button>
+      <button onClick={onComplete}>Complete</button>
+      <button onClick={onRemove}>X</button>
     </div>
   );
 }
@@ -31,7 +31,6 @@ function TodoForm({ addTodo }) {
         value={value}
         onChange={e => setValue(e.target.value)}
       />
-      ;
     </form>
   );
 }
@@ -40,30 +39,35 @@ function App() {
   const [todos, setTodos] = useState([
     {
       text: 'Task 1',
-      isCompleted: false
+      isComplete: false,
+      id: uniqid()
     },
     {
       text: 'Task 2',
-      isCompleted: false
+      isComplete: false,
+      id: uniqid()
     },
     {
       text: 'Task 3',
-      isCompleted: false
+      isComplete: false,
+      id: uniqid()
     }
   ]);
 
   const addTodo = text => {
-    setTodos([...todos, { text }]);
+    setTodos([...todos, { text, id: uniqid() }]);
   };
 
-  const completeTodo = index => {
+  const completeTodo = id => {
     const newTodos = [...todos];
-    newTodos[index].isCompleted = true;
+    const index = newTodos.findIndex(todo => todo.id === id);
+    newTodos[index].isComplete = true;
     setTodos(newTodos);
   };
 
-  const removeTodo = index => {
+  const removeTodo = id => {
     const newTodos = [...todos];
+    const index = newTodos.findIndex(todo => todo.id === id);
     newTodos.splice(index, 1);
     setTodos(newTodos);
   };
@@ -71,13 +75,12 @@ function App() {
   return (
     <div className="app">
       <div className="todo-list">
-        {todos.map((todo, index) => (
+        {todos.map(todo => (
           <Todo
-            key={index}
-            index={index}
+            key={todo.id}
             todo={todo}
-            completeTodo={completeTodo}
-            removeTodo={removeTodo}
+            onComplete={() => completeTodo(todo.id)}
+            onRemove={() => removeTodo(todo.id)}
           />
         ))}
         <TodoForm addTodo={addTodo} />
