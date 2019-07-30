@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import uniqid from 'uniqid';
 
-function Todo({ todo, onComplete, onRemove }) {
+const Todo = ({ todo, onComplete, onRemove }) => {
   return (
     <div
       className="todo"
@@ -12,9 +12,9 @@ function Todo({ todo, onComplete, onRemove }) {
       <button onClick={onRemove}>X</button>
     </div>
   );
-}
+};
 
-function TodoForm({ addTodo }) {
+const TodoForm = ({ addTodo }) => {
   const [value, setValue] = useState('');
   const handleSubmit = e => {
     e.preventDefault();
@@ -33,9 +33,9 @@ function TodoForm({ addTodo }) {
       />
     </form>
   );
-}
+};
 
-function App() {
+const App = () => {
   const [todos, setTodos] = useState([
     {
       text: 'Task 1',
@@ -87,6 +87,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
